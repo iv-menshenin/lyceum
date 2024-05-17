@@ -9,5 +9,4 @@ package anagram
 
 // anagram функция возвращает true, если одно слово является анаграммой второго, иначе она возвращает false.
 func anagram(a, b string) bool {
-
 }
