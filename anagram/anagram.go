@@ -12,9 +12,6 @@ func anagram(a, b string) bool {
 	if len(a) == 0 {
 		return false
 	}
-	if len(a) != len(b) {
-		return false
-	}
 	var m = make(map[rune]int)
 	for _, r := range a {
 		m[r]++
@@ -23,7 +20,7 @@ func anagram(a, b string) bool {
 		m[r]--
 	}
 	for _, v := range m {
-		if v != 0 {
+		if v > 0 {
 			return false
 		}
 	}
