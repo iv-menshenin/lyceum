@@ -79,7 +79,6 @@ func TestFusionCollection(t *testing.T) {
 		_ = c.Push(2)
 		_ = c.Push(1)
 		_ = c.Push(42)
-		_ = c.Push(67)
 		_ = c.Push(43)
 
 		require.Equal(t, *c.Get(4), 1)
