@@ -38,7 +38,10 @@ echo '```' | tee "${TESTR}/stat.log"
 ./bin/benchstat -filter ".unit:(ns/op OR allocs/op)" -table .config -col .name ./results/benchmarks.log | tee -a "${TESTR}/stat.log"
 echo '```' | tee -a "${TESTR}/stat.log"
 
-jq -n --rawfile a ./results/stat.log '{body: $a}' | tee ./results/stat.json
+wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64  || exit 1
+chmod +x ./jq
+
+./jq -n --rawfile a ./results/stat.log '{body: $a}' | tee ./results/stat.json || exit 1
 
 curl --http1.1 -v -L \
   -H "Accept: application/vnd.github+json" \
