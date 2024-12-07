@@ -45,4 +45,5 @@ curl --http1.1 -v -L \
   -H "Authorization: token $GH_TOKEN" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
   "https://api.github.com/repos/${GH_REPO}/issues/${GH_PULL}/comments" \
-  -d @results/stat.json
+  -d @results/stat.json \
+  -o ./results/curl.out.txt
