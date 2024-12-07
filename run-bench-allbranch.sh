@@ -40,7 +40,7 @@ echo '```' | tee -a "${TESTR}/stat.log"
 
 jq -n --rawfile a ./results/stat.log '{body: $a}' | tee ./results/stat.json
 
-curl -v -L -X POST \
+curl --http1.1 -v -L -X POST \
   -H "Accept: application/vnd.github+json" \
   -H "Authorization: token $GH_TOKEN" \
   -H "X-GitHub-Api-Version: 2022-11-28" \
