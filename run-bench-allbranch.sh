@@ -4,8 +4,6 @@ GH_TOKEN=$1
 GH_REPO=$2
 GH_PULL=$3
 
-mkdir -p ./bin
-GOBIN="$(pwd)/bin" go install golang.org/x/perf/cmd/...@latest
 TESTR="$(pwd)/results"
 
 # Получаем список всех измененных файлов за все время существования ветки
@@ -42,6 +40,9 @@ if [[ -z "$BENCHED" ]]; then
   echo "there is no benchmarks"
   exit 0
 fi
+
+mkdir -p ./bin
+GOBIN="$(pwd)/bin" go install golang.org/x/perf/cmd/...@latest
 
 echo '```' | tee "${TESTR}/stat.log"
 ./bin/benchstat -filter ".unit:(ns/op OR allocs/op)" -table .config -col .name ./results/benchmarks.log | tee -a "${TESTR}/stat.log"
