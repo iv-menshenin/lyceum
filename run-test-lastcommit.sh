@@ -25,7 +25,8 @@ wget -O jq https://github.com/stedolan/jq/releases/download/jq-1.6/jq-linux64 > 
 chmod +x ./jq > /dev/null
 
 ACC=""
-OUT=""
+FAILED=""
+PASSED=""
 echo "" | tee ./results/tests.log
 # Проходим по списку каталогов и запускаем в них тесты, если есть
 for path in "${UNIQ[@]}"; do
@@ -43,10 +44,11 @@ for path in "${UNIQ[@]}"; do
         fi
       fi
       if [[ "$RES" == "pass" ]]; then
+        PASSED=$(printf '%s\n%s' "$PASSED" "$TST")
         ACC=""
       fi
       if [[ "$RES" == "fail" ]]; then
-        OUT=$(printf '%s\n\n%s' "$OUT" "$ACC")
+        FAILED=$(printf '%s\n\n%s' "$FAILED" "$ACC")
         ACC=""
       fi
       if [[ "$RES" == "run" ]]; then
@@ -55,7 +57,11 @@ for path in "${UNIQ[@]}"; do
     done < ./results/test.out
 done
 
-printf '```\n%s\n```\n' "$OUT" | tee ./results/test_stat.log > /dev/null
+if [[ -n "$FAILED" ]]; then
+  printf 'FAILED\n```\n%s\n```\n' "$FAILED" | tee ./results/test_stat.log > /dev/null
+else
+  printf 'PASSED\n```\n%s\n```\n' "$PASSED" | tee ./results/test_stat.log > /dev/null
+fi
 
 ./jq -n --rawfile a ./results/test_stat.log '{body: $a}' | tee ./results/test_stat.json > /dev/null || exit 1
 
