@@ -20,7 +20,7 @@ func anagram(a, b string) bool {
 		m[r]--
 	}
 	for _, v := range m {
-		if v == 0 {
+		if v > 0 {
 			return false
 		}
 	}
