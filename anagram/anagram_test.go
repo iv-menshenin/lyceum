@@ -2,10 +2,11 @@ package anagram
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestAnagram(t *testing.T) {
-	t.Parallel()
 	var tests = []struct {
 		name string
 		arg1 string
@@ -56,10 +57,9 @@ func TestAnagram(t *testing.T) {
 	for i := range tests {
 		test := tests[i]
 		t.Run(test.name, func(t *testing.T) {
-			t.Parallel()
 			got := anagram(test.arg1, test.arg2)
 			if test.want != got {
-				t.Errorf("got: %v, want: %v", got, test.want)
+				assert.Equal(t, test.want, got, "anagram(%q, %q)", test.arg1, test.arg2)
 			}
 		})
 	}
