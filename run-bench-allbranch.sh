@@ -27,12 +27,21 @@ for file in $FILES; do
     fi
 done
 
+BENCHED=""
 # Проходим по списку каталогов и запускаем в них тесты, если есть
 for path in "${UNIQ[@]}"; do
     pushd ./"$path" || exit 1
-    go test --run=^$ --bench=. --count=10 --timeout=60m | tee -a "${TESTR}/benchmarks.log"
+    if [[ -n "$(go test --list . | grep Benchmark)" ]]; then
+      go test --run=^$ --bench=. --count=10 --timeout=60m | tee -a "${TESTR}/benchmarks.log"
+      BENCHED="OK"
+    fi
     popd || exit 1
 done
+
+if [[ -z "$BENCHED" ]]; then
+  echo "there is no benchmarks"
+  exit 0
+fi
 
 echo '```' | tee "${TESTR}/stat.log"
 ./bin/benchstat -filter ".unit:(ns/op OR allocs/op)" -table .config -col .name ./results/benchmarks.log | tee -a "${TESTR}/stat.log"
