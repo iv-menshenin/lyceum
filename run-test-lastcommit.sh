@@ -60,7 +60,11 @@ done
 if [[ -n "$FAILED" ]]; then
   printf 'FAILED\n```\n%s\n```\n' "$FAILED" | tee ./results/test_stat.log > /dev/null
 else
-  printf 'PASSED\n```\n%s\n```\n' "$PASSED" | tee ./results/test_stat.log > /dev/null
+  if [[ -n "$PASSED" ]]; then
+    printf 'PASSED\n```\n%s\n```\n' "$PASSED" | tee ./results/test_stat.log > /dev/null
+  else
+    exit 0
+  fi
 fi
 
 ./jq -n --rawfile a ./results/test_stat.log '{body: $a}' | tee ./results/test_stat.json > /dev/null || exit 1
